@@ -1,7 +1,8 @@
 package com.example.notebooksqlite.models
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 
-class AddViewModel : ViewModel() {
+
+class AddViewModel: ViewModel() {
     // TODO: Implement the ViewModel
 }
