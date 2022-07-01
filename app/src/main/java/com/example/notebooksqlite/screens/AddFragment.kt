@@ -37,8 +37,8 @@ class AddFragment : Fragment() {
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
                 result ->
             if (result.resultCode == Activity.RESULT_OK){
-                val intentData = Uri.parse(result?.data.toString())
-                binding.imgAdded.setImageURI(intentData)
+                val intentData = result.data?.getStringExtra("uri")
+//                binding.imgAdded.setImageURI(intentData)
                 Log.d("My", intentData.toString())
             }
         }
@@ -60,6 +60,7 @@ class AddFragment : Fragment() {
         }
         imgBtnEdit.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
+            intent.putExtra("uri", uri.toString)
             intent.type = "image/*"
             launcher?.launch(intent)
         }
