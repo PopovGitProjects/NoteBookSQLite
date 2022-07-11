@@ -23,6 +23,8 @@ class AddFragment : Fragment() {
 
     private var launcher: ActivityResultLauncher<Intent>? = null
 
+    private val imageRequestCode = 1
+
     companion object {
         fun newInstance() = AddFragment()
     }
@@ -34,15 +36,23 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
-        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                result ->
-            if (result.resultCode == Activity.RESULT_OK){
-                val intentData = Uri.parse(result.data.toString())
-                binding.imgAdded.setImageURI(intentData)
-                Log.d("My", intentData.toString())
-            }
-        }
+//        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+//                result ->
+//            if (result.resultCode == Activity.RESULT_OK){
+//                val intentData = result.data
+//                binding.imgAdded.setImageURI(intentData)
+//                Log.d("My", intentData.toString())
+//            }
+//        }
         return binding.root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == imageRequestCode){
+            binding.imgAdded.setImageURI(data?.data)
+            Log.d("My", data?.data.toString())
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,13 +65,15 @@ class AddFragment : Fragment() {
             fabAddImage.visibility = View.GONE
         }
         imgBtnDelete.setOnClickListener {
+            imgAdded.setImageURI(null)
             imageLayout.visibility = View.GONE
             fabAddImage.visibility = View.VISIBLE
         }
         imgBtnEdit.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            launcher?.launch(intent)
+            startActivityForResult(intent, imageRequestCode)
+//            launcher?.launch(intent)
         }
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
