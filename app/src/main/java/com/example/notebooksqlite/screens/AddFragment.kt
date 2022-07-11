@@ -1,10 +1,7 @@
 package com.example.notebooksqlite.screens
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +9,25 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.load
+import coil.transform.CircleCropTransformation
+import com.example.notebooksqlite.constants.Const
 import com.example.notebooksqlite.databinding.FragmentAddBinding
 import com.example.notebooksqlite.models.AddViewModel
 
 class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
-    // This property is only valid between onCreateView and
-// onDestroyView.
+
     private val binding get() = _binding!!
 
-    private var launcher: ActivityResultLauncher<Intent>? = null
-
+    private val launcher: ActivityResultLauncher<String> = registerForActivityResult(
+        ActivityResultContracts.GetContent()){
+            imageUri: Uri? ->
+            binding.imgAdded.load(imageUri){
+                crossfade(false)
+                transformations(CircleCropTransformation())
+            }
+        }
     companion object {
         fun newInstance() = AddFragment()
     }
@@ -34,14 +39,6 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
-        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                result ->
-            if (result.resultCode == Activity.RESULT_OK){
-                val intentData = result.data?.getStringExtra("uri")
-//                binding.imgAdded.setImageURI(intentData)
-                Log.d("My", intentData.toString())
-            }
-        }
         return binding.root
     }
 
@@ -59,10 +56,7 @@ class AddFragment : Fragment() {
             fabAddImage.visibility = View.VISIBLE
         }
         imgBtnEdit.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.putExtra("uri", uri.toString)
-            intent.type = "image/*"
-            launcher?.launch(intent)
+            launcher.launch(Const.MIME_TYPE_IMAGE)
         }
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
