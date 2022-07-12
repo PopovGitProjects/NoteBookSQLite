@@ -40,7 +40,8 @@ class DBManager(context: Context) {
                 val id = cursor?.getString(cursor.getColumnIndex(BaseColumns._ID))
                 val title = cursor?.getString(cursor.getColumnIndex(DBConstants.COLUMN_NAME_TITLE))
                 val content = cursor?.getString(cursor.getColumnIndex(DBConstants.COLUMN_NAME_CONTENT))
-                dataList.add(Model(id.toString(),title.toString(), content.toString()))
+                val uri = cursor?.getString(cursor.getColumnIndex(DBConstants.COLUMN_IMAGE_URI))
+                dataList.add(Model(id.toString(),title.toString(), content.toString(), uri.toString()))
             }
         }
         cursor?.close()
