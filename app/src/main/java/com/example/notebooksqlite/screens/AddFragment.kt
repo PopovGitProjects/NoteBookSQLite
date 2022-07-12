@@ -1,8 +1,8 @@
 package com.example.notebooksqlite.screens
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +17,16 @@ import com.example.notebooksqlite.R
 import com.example.notebooksqlite.constants.Const
 import com.example.notebooksqlite.databinding.FragmentAddBinding
 import com.example.notebooksqlite.db.DBManager
-import com.example.notebooksqlite.models.AddViewModel
 
 class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
 
     private val binding get() = _binding!!
 
-    private var thisContext: Context? = null
+    private var tempImageUri = "empty"
+
+    private val myDBManager = DBManager(requireContext())
+
 
     private val launcher: ActivityResultLauncher<String> = registerForActivityResult(
         ActivityResultContracts.GetContent()){
@@ -40,9 +42,6 @@ class AddFragment : Fragment() {
             }
         tempImageUri = imageUri.toString()
         }
-    private var tempImageUri = "empty"
-
-    private val myDBManager = activity?.let { DBManager(it) }
 
     companion object {
         fun newInstance() = AddFragment()
@@ -53,7 +52,6 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        thisContext = container?.context
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -78,19 +76,20 @@ class AddFragment : Fragment() {
             val title = edtTitle.text.toString()
             val note = edtNote.text.toString()
             if (title != "" && note != ""){
-                myDBManager?.insertToDB(title, note, tempImageUri)
+                myDBManager.insertToDB(title, note, tempImageUri)
                 findNavController().navigate(R.id.action_addFragment_to_mainFragment)
-                Toast.makeText(thisContext, "Entry added to Data Base", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Entry added to Data Base", Toast.LENGTH_SHORT).show()
+                Log.d("My", context.toString())
             }
         }
     }
     override fun onResume() {
         super.onResume()
-        myDBManager?.openDB()
+        myDBManager.openDB()
     }
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        myDBManager?.closeDb()
+        myDBManager.closeDb()
     }
 }

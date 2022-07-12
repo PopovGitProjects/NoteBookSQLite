@@ -1,6 +1,5 @@
 package com.example.notebooksqlite.screens
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,9 +22,7 @@ class MainFragment : Fragment() {
 
     private val adapter = Adapter(ArrayList())
 
-
-    private var thisContext: Context? = null
-
+    private val myDBManager = DBManager(requireContext())
 
     companion object {
         fun newInstance() = MainFragment()
@@ -34,11 +31,9 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        thisContext = container?.context
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
-    private val myDBManager = thisContext?.let { DBManager(it) }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRc()
@@ -56,23 +51,23 @@ class MainFragment : Fragment() {
         }
     }
     private fun initRc() = with(binding){
-        rvNotes.layoutManager = LinearLayoutManager(thisContext)
+        rvNotes.layoutManager = LinearLayoutManager(requireContext())
         rvNotes.adapter = adapter
     }
     private fun fillAdapter(){
-        myDBManager?.let { adapter.updateAdapter(it.readDBData()) }
-        val temp = myDBManager?.let { adapter.updateAdapter(it.readDBData()) }
+        adapter.updateAdapter(myDBManager.readDBData())
+        val temp = adapter.updateAdapter(myDBManager.readDBData())
         Log.d("My", temp.toString())
     }
 
     override fun onResume() {
         super.onResume()
-        myDBManager?.openDB()
+        myDBManager.openDB()
         fillAdapter()
     }
     override fun onDestroy() {
         super.onDestroy()
-        myDBManager?.closeDb()
+        myDBManager.closeDb()
         _binding = null
     }
 
