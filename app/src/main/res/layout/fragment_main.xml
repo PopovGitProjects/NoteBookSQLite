@@ -40,7 +40,6 @@
         android:id="@+id/tvNoElement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data base is empty"
         android:textSize="24sp"
         android:textStyle="italic"
         android:layout_gravity="center"

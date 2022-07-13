@@ -2,7 +2,6 @@ package com.example.notebooksqlite.screens
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,14 +24,14 @@ class AddFragment : Fragment() {
 
     private var tempImageUri = "empty"
 
-    private val myDBManager = DBManager(requireContext())
+    private var myDBManager: DBManager? = null
 
 
     private val launcher: ActivityResultLauncher<String> = registerForActivityResult(
         ActivityResultContracts.GetContent()){
             imageUri: Uri? ->
             binding.imgAdded.load(imageUri){
-                crossfade(false)
+                crossfade(true)
                 transformations(RoundedCornersTransformation(
                     topLeft = 10f,
                     topRight = 10f,
@@ -53,6 +52,9 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
+        if (requireContext() != null){
+            myDBManager = DBManager(requireContext())
+        }
         return binding.root
     }
 
@@ -76,20 +78,19 @@ class AddFragment : Fragment() {
             val title = edtTitle.text.toString()
             val note = edtNote.text.toString()
             if (title != "" && note != ""){
-                myDBManager.insertToDB(title, note, tempImageUri)
+                myDBManager?.insertToDB(title, note, tempImageUri)
                 findNavController().navigate(R.id.action_addFragment_to_mainFragment)
                 Toast.makeText(requireContext(), "Entry added to Data Base", Toast.LENGTH_SHORT).show()
-                Log.d("My", context.toString())
             }
         }
     }
     override fun onResume() {
         super.onResume()
-        myDBManager.openDB()
+        myDBManager?.openDB()
     }
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        myDBManager.closeDb()
+        myDBManager?.closeDb()
     }
 }

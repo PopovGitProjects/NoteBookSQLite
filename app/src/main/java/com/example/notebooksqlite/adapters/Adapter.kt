@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.databinding.NoteItemBinding
 import com.example.notebooksqlite.models.Model
@@ -20,7 +22,16 @@ class Adapter(private val mainItemList: ArrayList<Model>): RecyclerView.Adapter<
             itemNote.text = item.content
             if (item.uri != "empty"){
                 itemImgView.visibility = View.VISIBLE
-                itemImgView.setImageURI(Uri.parse(item.uri))
+//                itemImgView.setImageURI(Uri.parse(item.uri))
+                itemImgView.load(Uri.parse(item.uri)){
+                    crossfade(true)
+                    transformations(RoundedCornersTransformation(
+                        topLeft = 5f,
+                        topRight = 5f,
+                        bottomLeft = 5f,
+                        bottomRight = 5f
+                    ))
+                }
             }
 
         }

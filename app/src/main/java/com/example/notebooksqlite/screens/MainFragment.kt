@@ -1,7 +1,6 @@
 package com.example.notebooksqlite.screens
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +21,8 @@ class MainFragment : Fragment() {
 
     private val adapter = Adapter(ArrayList())
 
-    private val myDBManager = DBManager(requireContext())
+
+    private var myDBManager: DBManager? = null
 
     companion object {
         fun newInstance() = MainFragment()
@@ -32,6 +32,9 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
+        if (requireContext() != null){
+            myDBManager = DBManager(requireContext())
+        }
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,19 +58,17 @@ class MainFragment : Fragment() {
         rvNotes.adapter = adapter
     }
     private fun fillAdapter(){
-        adapter.updateAdapter(myDBManager.readDBData())
-        val temp = adapter.updateAdapter(myDBManager.readDBData())
-        Log.d("My", temp.toString())
+        myDBManager?.let { adapter.updateAdapter(it.readDBData()) }
     }
 
     override fun onResume() {
         super.onResume()
-        myDBManager.openDB()
+        myDBManager?.openDB()
         fillAdapter()
     }
     override fun onDestroy() {
         super.onDestroy()
-        myDBManager.closeDb()
+        myDBManager?.closeDb()
         _binding = null
     }
 
