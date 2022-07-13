@@ -19,8 +19,7 @@ class MainFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val adapter = Adapter(ArrayList())
-
+    private val adapter = Adapter(ArrayList(), )
 
     private var myDBManager: DBManager? = null
 

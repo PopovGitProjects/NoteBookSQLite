@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.example.notebooksqlite.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.databinding.NoteItemBinding
 import com.example.notebooksqlite.models.Model
@@ -14,15 +15,15 @@ import com.example.notebooksqlite.models.Model
 
 class Adapter(private val mainItemList: ArrayList<Model>): RecyclerView.Adapter<Adapter.ViewHolder>() {
     private var itemList = mainItemList
+    val clickListener: OnRecyclerViewItemClickListener? = null
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, clickListener: OnRecyclerViewItemClickListener) : RecyclerView.ViewHolder(itemView) {
+        private val vClickListener = clickListener
         private val binding = NoteItemBinding.bind(itemView)
         fun init(item: Model) = with(binding) {
             itemTitle.text = item.title
-            itemNote.text = item.content
             if (item.uri != "empty"){
                 itemImgView.visibility = View.VISIBLE
-//                itemImgView.setImageURI(Uri.parse(item.uri))
                 itemImgView.load(Uri.parse(item.uri)){
                     crossfade(true)
                     transformations(RoundedCornersTransformation(
@@ -33,13 +34,18 @@ class Adapter(private val mainItemList: ArrayList<Model>): RecyclerView.Adapter<
                     ))
                 }
             }
+            itemView.setOnClickListener {
+                if (vClickListener != null){
+                    vClickListener.onClick()
+                }
+            }
 
         }
     }
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.note_item, viewGroup, false)
-        return ViewHolder(view)
+        return ViewHolder(view, aClickListener)
     }
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.init(itemList[position])
