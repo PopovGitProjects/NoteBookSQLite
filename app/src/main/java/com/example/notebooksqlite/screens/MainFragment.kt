@@ -1,5 +1,6 @@
 package com.example.notebooksqlite.screens
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,17 +10,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.notebooksqlite.MainActivity
+import com.example.notebooksqlite.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.adapters.Adapter
 import com.example.notebooksqlite.databinding.FragmentMainBinding
 import com.example.notebooksqlite.db.DBManager
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     private var _binding: FragmentMainBinding? = null
 
     private val binding get() = _binding!!
 
-    private val adapter = Adapter(ArrayList(), )
+    private val adapter = Adapter(ArrayList(), object : OnRecyclerViewItemClickListener {
+        override fun onClick() {
+            findNavController().navigate(R.id.action_mainFragment_to_addFragment)
+        }
+    })
 
     private var myDBManager: DBManager? = null
 
@@ -71,4 +78,7 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
+    override fun onClick() {
+        findNavController().navigate(R.id.action_mainFragment_to_addFragment)
+    }
 }

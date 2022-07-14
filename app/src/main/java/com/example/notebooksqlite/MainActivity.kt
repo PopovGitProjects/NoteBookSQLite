@@ -7,7 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.notebooksqlite.databinding.ActivityMainBinding
 import com.example.notebooksqlite.screens.AddFragment
 
-class MainActivity : AppCompatActivity(), OnRecyclerViewItemClickListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
@@ -19,12 +19,5 @@ class MainActivity : AppCompatActivity(), OnRecyclerViewItemClickListener {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-    }
-
-    override fun onClick() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.nav_host_fragment, AddFragment.newInstance())
-            .commit()
     }
 }

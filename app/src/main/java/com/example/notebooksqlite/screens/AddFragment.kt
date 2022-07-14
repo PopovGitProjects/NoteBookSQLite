@@ -1,5 +1,6 @@
 package com.example.notebooksqlite.screens
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.example.notebooksqlite.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.constants.Const
 import com.example.notebooksqlite.databinding.FragmentAddBinding

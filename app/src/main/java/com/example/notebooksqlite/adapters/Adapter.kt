@@ -1,5 +1,6 @@
 package com.example.notebooksqlite.adapters
 
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +14,15 @@ import com.example.notebooksqlite.databinding.NoteItemBinding
 import com.example.notebooksqlite.models.Model
 
 
-class Adapter(private val mainItemList: ArrayList<Model>): RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(private val mainItemList: ArrayList<Model>,
+              listener: OnRecyclerViewItemClickListener): RecyclerView.Adapter<Adapter.ViewHolder>() {
     private var itemList = mainItemList
-    val clickListener: OnRecyclerViewItemClickListener? = null
+    private val adapterListener = listener
 
-    class ViewHolder(itemView: View, clickListener: OnRecyclerViewItemClickListener) : RecyclerView.ViewHolder(itemView) {
-        private val vClickListener = clickListener
+
+    class ViewHolder(itemView: View, listener: OnRecyclerViewItemClickListener) : RecyclerView.ViewHolder(itemView){
         private val binding = NoteItemBinding.bind(itemView)
+        private val holderListener = listener
         fun init(item: Model) = with(binding) {
             itemTitle.text = item.title
             if (item.uri != "empty"){
@@ -35,20 +38,20 @@ class Adapter(private val mainItemList: ArrayList<Model>): RecyclerView.Adapter<
                 }
             }
             itemView.setOnClickListener {
-                if (vClickListener != null){
-                    vClickListener.onClick()
-                }
+                holderListener.onClick()
+                val intent = Intent()
             }
-
         }
     }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.note_item, viewGroup, false)
-        return ViewHolder(view, aClickListener)
+        return ViewHolder(view, adapterListener)
     }
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.init(itemList[position])
+
     }
     override fun getItemCount() = itemList.size
     fun updateAdapter(mainItemList: ArrayList<Model>){
