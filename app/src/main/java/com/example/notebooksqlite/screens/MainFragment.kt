@@ -1,30 +1,34 @@
 package com.example.notebooksqlite.screens
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.notebooksqlite.MainActivity
-import com.example.notebooksqlite.OnRecyclerViewItemClickListener
+import com.example.notebooksqlite.interfaces.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.adapters.Adapter
 import com.example.notebooksqlite.databinding.FragmentMainBinding
 import com.example.notebooksqlite.db.DBManager
+import com.example.notebooksqlite.models.MainViewModel
+import com.example.notebooksqlite.models.Model
 
 class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     private var _binding: FragmentMainBinding? = null
 
     private val binding get() = _binding!!
 
+    private val dataModel: MainViewModel by activityViewModels()
+
     private val adapter = Adapter(ArrayList(), object : OnRecyclerViewItemClickListener {
-        override fun onClick() {
+        override fun onClick(item: Model) {
             findNavController().navigate(R.id.action_mainFragment_to_addFragment)
+            dataModel.data.value = item
         }
     })
 
@@ -78,7 +82,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         _binding = null
     }
 
-    override fun onClick() {
+    override fun onClick(item: Model) {
         findNavController().navigate(R.id.action_mainFragment_to_addFragment)
     }
 }

@@ -7,12 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".screens.AddFragment" >
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.40218878" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutTitle"
@@ -88,12 +99,11 @@
         android:id="@+id/imageLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayoutTitle"
         app:layout_constraintStart_toStartOf="@+id/textInputLayoutTitle"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialToolbar"
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
@@ -105,7 +115,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            tools:visibility="visible" />
 
         <ImageButton
             android:id="@+id/imgBtnEdit"

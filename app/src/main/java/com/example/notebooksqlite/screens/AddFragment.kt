@@ -1,8 +1,8 @@
 package com.example.notebooksqlite.screens
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +10,18 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.example.notebooksqlite.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.constants.Const
 import com.example.notebooksqlite.databinding.FragmentAddBinding
 import com.example.notebooksqlite.db.DBManager
+import com.example.notebooksqlite.models.MainViewModel
 
 class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
@@ -28,9 +32,10 @@ class AddFragment : Fragment() {
 
     private var myDBManager: DBManager? = null
 
+    private val dataModel: MainViewModel by activityViewModels()
 
-    private val launcher: ActivityResultLauncher<String> = registerForActivityResult(
-        ActivityResultContracts.GetContent()){
+    private val launcher: ActivityResultLauncher<Array<String>> = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()){
             imageUri: Uri? ->
             binding.imgAdded.load(imageUri){
                 crossfade(true)
@@ -62,7 +67,26 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolBar()
         buttonAction()
+        if (dataModel.data.value != null){
+            dataRequest()
+        }
+    }
+    private fun dataRequest() = with(binding){
+        dataModel.data.observe(activity as LifecycleOwner) {
+            if (it.uri != "empty"){
+                Log.d("My", "uri in load ${it.uri}")
+                imageLayout.visibility = View.VISIBLE
+                imgBtnEdit.visibility = View.GONE
+                imgBtnDelete.visibility = View.GONE
+                imgAdded.load(it.uri)
+            }
+            fabAddImage.visibility = View.GONE
+            fabCheck.visibility = View.GONE
+            edtTitle.setText(it.title)
+            edtNote.setText(it.content)
+        }
     }
     private fun buttonAction() = with(binding){
         fabAddImage.setOnClickListener {
@@ -74,7 +98,7 @@ class AddFragment : Fragment() {
             fabAddImage.visibility = View.VISIBLE
         }
         imgBtnEdit.setOnClickListener {
-            launcher.launch(Const.MIME_TYPE_IMAGE)
+            launcher.launch(arrayOf(Const.MIME_TYPE_IMAGE))
         }
         fabCheck.setOnClickListener {
             val title = edtTitle.text.toString()
@@ -94,5 +118,10 @@ class AddFragment : Fragment() {
         super.onDestroy()
         _binding = null
         myDBManager?.closeDb()
+    }
+    private fun toolBar() = with(binding){
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        materialToolbar.setupWithNavController(findNavController(), appBarConfiguration)
+        materialToolbar.title = "Add Note"
     }
 }

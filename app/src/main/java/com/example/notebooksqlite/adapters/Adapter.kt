@@ -1,6 +1,5 @@
 package com.example.notebooksqlite.adapters
 
-import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.example.notebooksqlite.OnRecyclerViewItemClickListener
+import com.example.notebooksqlite.interfaces.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.databinding.NoteItemBinding
 import com.example.notebooksqlite.models.Model
 
 
 class Adapter(private val mainItemList: ArrayList<Model>,
-              listener: OnRecyclerViewItemClickListener): RecyclerView.Adapter<Adapter.ViewHolder>() {
+              listener: OnRecyclerViewItemClickListener
+): RecyclerView.Adapter<Adapter.ViewHolder>() {
     private var itemList = mainItemList
     private val adapterListener = listener
 
@@ -38,8 +38,7 @@ class Adapter(private val mainItemList: ArrayList<Model>,
                 }
             }
             itemView.setOnClickListener {
-                holderListener.onClick()
-                val intent = Intent()
+                holderListener.onClick(item)
             }
         }
     }
