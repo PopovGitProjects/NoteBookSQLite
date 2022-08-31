@@ -1,11 +1,13 @@
 package com.example.notebooksqlite.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -29,6 +31,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         override fun onClick(item: Model) {
             findNavController().navigate(R.id.action_mainFragment_to_addFragment)
             dataModel.data.value = item
+            Log.d("My", "MainFragment output liveData: ${dataModel.data.value}")
         }
     })
 

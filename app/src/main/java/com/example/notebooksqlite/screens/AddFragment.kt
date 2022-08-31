@@ -11,7 +11,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -69,12 +68,15 @@ class AddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         toolBar()
         buttonAction()
+        Log.d("My", "AddFragment input liveData: ${dataModel.data.value}")
         if (dataModel.data.value != null){
             dataRequest()
         }
     }
     private fun dataRequest() = with(binding){
-        dataModel.data.observe(activity as LifecycleOwner) {
+        dataModel.data.observe(viewLifecycleOwner) {
+            Log.d("My", "observer input liveData: ${dataModel.data.value}")
+            Log.d("My", "it: $it")
             if (it.uri != "empty"){
                 Log.d("My", "uri in load ${it.uri}")
                 imageLayout.visibility = View.VISIBLE
@@ -118,6 +120,7 @@ class AddFragment : Fragment() {
         super.onDestroy()
         _binding = null
         myDBManager?.closeDb()
+        dataModel.data.value = null
     }
     private fun toolBar() = with(binding){
         val appBarConfiguration = AppBarConfiguration(findNavController().graph)
