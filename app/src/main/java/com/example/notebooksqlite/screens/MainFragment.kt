@@ -7,16 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.notebooksqlite.interfaces.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.adapters.Adapter
 import com.example.notebooksqlite.databinding.FragmentMainBinding
 import com.example.notebooksqlite.db.DBManager
+import com.example.notebooksqlite.interfaces.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.models.MainViewModel
 import com.example.notebooksqlite.models.Model
 
