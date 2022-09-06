@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -54,6 +55,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         initRc()
         toolBar()
         fabAction()
+        initSearchView()
     }
     private fun toolBar() = with(binding){
         val appBarConfig = AppBarConfiguration(findNavController().graph)
@@ -64,6 +66,18 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         fabGoToAddFragment.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_addFragment)
         }
+    }
+    private fun initSearchView() = with(binding){
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                myDBManager?.let { adapter.updateAdapter(it.readDBData()) }
+                return true
+            }
+        })
     }
     private fun initRc() = with(binding){
         rvNotes.layoutManager = LinearLayoutManager(requireContext())

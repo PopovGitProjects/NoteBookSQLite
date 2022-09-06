@@ -36,14 +36,10 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tvNoElement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        android:layout_gravity="center"
-        tools:text="Data base is empty" />
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotes"
@@ -63,6 +59,15 @@
         android:contentDescription="@string/floating_action_button"
         android:focusable="true"
         android:src="@drawable/ic_icon_plus"
-        tools:ignore="RedundantDescriptionCheck" />
+        tools:ignore="RedundantDescriptionCheck,ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/tvNoElement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        tools:text="Data base is empty" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
