@@ -31,11 +31,10 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         override fun onClick(item: Model) {
             findNavController().navigate(R.id.action_mainFragment_to_addFragment)
             dataModel.data.value = item
-            Log.d("My", "MainFragment output liveData: ${dataModel.data.value}")
         }
     })
 
-    private var myDBManager: DBManager? = null
+    private var myDBManager: DBManager? = null // выяснить как автор объявляет эту переменную
 
     companion object {
         fun newInstance() = MainFragment()
@@ -74,7 +73,12 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                myDBManager?.let { adapter.updateAdapter(it.readDBData()) }
+                Log.d("My", "newText: $newText")
+                val list = myDBManager!!.readDBData(newText!!)
+                if (list != null) {
+                    adapter.updateAdapter(list)
+                }
+//                myDBManager?.let { adapter.updateAdapter(it.readDBData(newText)) }
                 return true
             }
         })
@@ -84,7 +88,12 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         rvNotes.adapter = adapter
     }
     private fun fillAdapter(){
-        myDBManager?.let { adapter.updateAdapter(it.readDBData()) }
+        val list = myDBManager!!.readDBData("")
+        if (list.size > 0){
+            binding.tvNoElement.visibility = View.GONE
+        }else{
+            binding.tvNoElement.visibility = View.VISIBLE
+        }
     }
 
     override fun onResume() {

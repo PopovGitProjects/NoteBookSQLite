@@ -30,8 +30,8 @@ class DBManager(context: Context) {
         val selection = "${DBConstants.COLUMN_NAME_TITLE} like ?"
         val cursor = db?.query(DBConstants.TABLE_NAME,
             null,
-            null,
-            arrayOf(searchText),
+            selection,
+            arrayOf("%$searchText%"),
             null,
             null,
             null
@@ -42,7 +42,7 @@ class DBManager(context: Context) {
                 val title = cursor?.getString(cursor.getColumnIndex(DBConstants.COLUMN_NAME_TITLE))
                 val content = cursor?.getString(cursor.getColumnIndex(DBConstants.COLUMN_NAME_CONTENT))
                 val uri = cursor?.getString(cursor.getColumnIndex(DBConstants.COLUMN_IMAGE_URI))
-                dataList.add(Model(id.toString(),title.toString(), content.toString(), uri.toString()))
+                dataList.add(Model(id.toString(), title.toString(), content.toString(), uri.toString()))
             }
         }
         cursor?.close()

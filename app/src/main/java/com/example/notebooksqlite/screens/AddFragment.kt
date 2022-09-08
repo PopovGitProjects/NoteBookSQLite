@@ -2,7 +2,6 @@ package com.example.notebooksqlite.screens
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,17 +67,13 @@ class AddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         toolBar()
         buttonAction()
-        Log.d("My", "AddFragment input liveData: ${dataModel.data.value}")
         if (dataModel.data.value != null){
             dataRequest()
         }
     }
     private fun dataRequest() = with(binding){
         dataModel.data.observe(viewLifecycleOwner) {
-            Log.d("My", "observer input liveData: ${dataModel.data.value}")
-            Log.d("My", "it: $it")
             if (it.uri != "empty"){
-                Log.d("My", "uri in load ${it.uri}")
                 imageLayout.visibility = View.VISIBLE
                 imgBtnEdit.visibility = View.GONE
                 imgBtnDelete.visibility = View.GONE
