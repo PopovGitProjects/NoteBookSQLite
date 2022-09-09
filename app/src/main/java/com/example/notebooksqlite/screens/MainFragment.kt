@@ -34,7 +34,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         }
     })
 
-    private var myDBManager: DBManager? = null // выяснить как автор объявляет эту переменную
+    private var myDBManager: DBManager? = null
 
     companion object {
         fun newInstance() = MainFragment()
@@ -54,7 +54,10 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         initRc()
         toolBar()
         fabAction()
-        initSearchView()
+        if (myDBManager != null){
+            initSearchView()
+        }
+
     }
     private fun toolBar() = with(binding){
         val appBarConfig = AppBarConfiguration(findNavController().graph)
@@ -73,11 +76,10 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("My", "newText: $newText")
+                Log.d("My", "onQueryTextChange() newText: $newText")
                 val list = myDBManager!!.readDBData(newText!!)
-                if (list != null) {
-                    adapter.updateAdapter(list)
-                }
+                Log.d("My", "onQueryTextChange() list: $list")
+                adapter.updateAdapter(list)
 //                myDBManager?.let { adapter.updateAdapter(it.readDBData(newText)) }
                 return true
             }
@@ -89,6 +91,8 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     }
     private fun fillAdapter(){
         val list = myDBManager!!.readDBData("")
+        Log.d("My", "fillAdapter() list: $list")
+        adapter.updateAdapter(list)
         if (list.size > 0){
             binding.tvNoElement.visibility = View.GONE
         }else{
@@ -99,6 +103,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     override fun onResume() {
         super.onResume()
         myDBManager?.openDB()
+        Log.d("My", "onResume() started")
         fillAdapter()
     }
     override fun onDestroy() {
