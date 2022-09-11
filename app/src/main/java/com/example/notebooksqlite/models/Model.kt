@@ -4,5 +4,6 @@ data class Model(
     val id: String,
     val title: String,
     val content: String,
-    val uri: String
+    val uri: String,
+    var edit: Boolean = false
 )

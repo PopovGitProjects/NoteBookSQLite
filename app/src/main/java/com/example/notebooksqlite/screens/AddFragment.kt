@@ -22,6 +22,11 @@ import com.example.notebooksqlite.db.DBManager
 import com.example.notebooksqlite.models.MainViewModel
 
 class AddFragment : Fragment() {
+
+    private var isEditState = false
+
+    private var itemID = 0
+
     private var _binding: FragmentAddBinding? = null
 
     private val binding get() = _binding!!
@@ -79,10 +84,16 @@ class AddFragment : Fragment() {
                 imgBtnDelete.visibility = View.GONE
                 imgAdded.load(it.uri)
             }
+            if (it.edit){
+                isEditState = true
+                itemID = it.id.toInt()
+                fabEdit.visibility = View.VISIBLE
+            }
             fabAddImage.visibility = View.GONE
-            fabCheck.visibility = View.GONE
             edtTitle.setText(it.title)
+            edtTitle.isEnabled = false
             edtNote.setText(it.content)
+            edtNote.isEnabled = false
         }
     }
     private fun buttonAction() = with(binding){
@@ -97,13 +108,26 @@ class AddFragment : Fragment() {
         imgBtnEdit.setOnClickListener {
             launcher.launch(arrayOf(Const.MIME_TYPE_IMAGE))
         }
+        fabEdit.setOnClickListener {
+            edtTitle.isEnabled = true
+            edtNote.isEnabled = true
+            imageLayout.visibility = View.VISIBLE
+            imgBtnEdit.visibility = View.VISIBLE
+            imgBtnDelete.visibility = View.VISIBLE
+            fabEdit.visibility = View.GONE
+        }
         fabCheck.setOnClickListener {
             val title = edtTitle.text.toString()
             val note = edtNote.text.toString()
             if (title != "" && note != ""){
-                myDBManager?.insertToDB(title, note, tempImageUri)
+                if (isEditState){
+                    myDBManager?.updateItemToDB(itemID, title, note, tempImageUri)
+                    Toast.makeText(requireContext(), "Entry updated to Data Base", Toast.LENGTH_SHORT).show()
+                }else{
+                    myDBManager?.insertToDB(title, note, tempImageUri)
+                    Toast.makeText(requireContext(), "Entry added to Data Base", Toast.LENGTH_SHORT).show()
+                }
                 findNavController().navigate(R.id.action_addFragment_to_mainFragment)
-                Toast.makeText(requireContext(), "Entry added to Data Base", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -116,6 +140,7 @@ class AddFragment : Fragment() {
         _binding = null
         myDBManager?.closeDb()
         dataModel.data.value = null
+        isEditState = false
     }
     private fun toolBar() = with(binding){
         val appBarConfiguration = AppBarConfiguration(findNavController().graph)

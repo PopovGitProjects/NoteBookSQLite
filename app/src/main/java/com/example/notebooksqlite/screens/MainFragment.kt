@@ -1,7 +1,6 @@
 package com.example.notebooksqlite.screens
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +33,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         }
     })
 
-    private var myDBManager: DBManager? = null // выяснить как автор объявляет эту переменную
+    private var myDBManager: DBManager? = null
 
     companion object {
         fun newInstance() = MainFragment()
@@ -54,7 +53,6 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         initRc()
         toolBar()
         fabAction()
-        initSearchView()
     }
     private fun toolBar() = with(binding){
         val appBarConfig = AppBarConfiguration(findNavController().graph)
@@ -71,14 +69,9 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("My", "newText: $newText")
                 val list = myDBManager!!.readDBData(newText!!)
-                if (list != null) {
-                    adapter.updateAdapter(list)
-                }
-//                myDBManager?.let { adapter.updateAdapter(it.readDBData(newText)) }
+                adapter.updateAdapter(list)
                 return true
             }
         })
@@ -89,6 +82,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     }
     private fun fillAdapter(){
         val list = myDBManager!!.readDBData("")
+        adapter.updateAdapter(list)
         if (list.size > 0){
             binding.tvNoElement.visibility = View.GONE
         }else{
@@ -100,6 +94,7 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         super.onResume()
         myDBManager?.openDB()
         fillAdapter()
+        initSearchView()
     }
     override fun onDestroy() {
         super.onDestroy()

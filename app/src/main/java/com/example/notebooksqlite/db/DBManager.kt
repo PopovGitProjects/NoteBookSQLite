@@ -48,7 +48,19 @@ class DBManager(context: Context) {
         cursor?.close()
         return dataList
     }
-
+    fun removeItemFromDB(id: String){
+        val selection = BaseColumns._ID + "=$id"
+        db?.delete(DBConstants.TABLE_NAME, selection, null)
+    }
+    fun updateItemToDB(id: Int, title: String, content: String, uri: String){
+        val selection = BaseColumns._ID + "=$id"
+        val values = ContentValues().apply {
+            put(DBConstants.COLUMN_NAME_TITLE, title)
+            put(DBConstants.COLUMN_NAME_CONTENT, content)
+            put(DBConstants.COLUMN_IMAGE_URI, uri)
+        }
+        db?.update(DBConstants.TABLE_NAME, values, selection, null)
+    }
     fun closeDb(){
         dbHelper.close()
     }

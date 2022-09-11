@@ -20,11 +20,13 @@ class Adapter(private val mainItemList: ArrayList<Model>,
     private val adapterListener = listener
 
 
-    class ViewHolder(itemView: View, listener: OnRecyclerViewItemClickListener) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View, listener: OnRecyclerViewItemClickListener):
+        RecyclerView.ViewHolder(itemView){
         private val binding = NoteItemBinding.bind(itemView)
         private val holderListener = listener
         fun init(item: Model) = with(binding) {
             itemTitle.text = item.title
+            item.edit = true
             if (item.uri != "empty"){
                 itemImgView.visibility = View.VISIBLE
                 itemImgView.load(Uri.parse(item.uri)){
