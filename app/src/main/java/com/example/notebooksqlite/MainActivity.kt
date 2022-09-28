@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity(){
 
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
-    private val dataModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

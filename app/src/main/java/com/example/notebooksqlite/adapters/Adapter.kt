@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.example.notebooksqlite.interfaces.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.R
 import com.example.notebooksqlite.databinding.NoteItemBinding
+import com.example.notebooksqlite.interfaces.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.models.Model
 
 
-class Adapter(private val mainItemList: ArrayList<Model>,
-              listener: OnRecyclerViewItemClickListener
+class Adapter(
+    mainItemList: ArrayList<Model>,
+    listener: OnRecyclerViewItemClickListener
 ): RecyclerView.Adapter<Adapter.ViewHolder>() {
     private var itemList = mainItemList
     private val adapterListener = listener
@@ -26,6 +27,7 @@ class Adapter(private val mainItemList: ArrayList<Model>,
         private val holderListener = listener
         fun init(item: Model) = with(binding) {
             itemTitle.text = item.title
+            itemTime.text = item.time
             item.edit = true
             if (item.uri != "empty"){
                 itemImgView.visibility = View.VISIBLE
@@ -41,6 +43,10 @@ class Adapter(private val mainItemList: ArrayList<Model>,
             }
             itemView.setOnClickListener {
                 holderListener.onClick(item)
+            }
+            itemView.setOnLongClickListener {
+                holderListener.onLongClick(item)
+                true
             }
         }
     }

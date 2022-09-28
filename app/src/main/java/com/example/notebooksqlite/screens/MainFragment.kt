@@ -18,6 +18,10 @@ import com.example.notebooksqlite.db.DBManager
 import com.example.notebooksqlite.interfaces.OnRecyclerViewItemClickListener
 import com.example.notebooksqlite.models.MainViewModel
 import com.example.notebooksqlite.models.Model
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     private var _binding: FragmentMainBinding? = null
@@ -26,10 +30,16 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
 
     private val dataModel: MainViewModel by activityViewModels()
 
+    private var job: Job? = null
+
     private val adapter = Adapter(ArrayList(), object : OnRecyclerViewItemClickListener {
         override fun onClick(item: Model) {
             findNavController().navigate(R.id.action_mainFragment_to_addFragment)
             dataModel.data.value = item
+        }
+        override fun onLongClick(item: Model) {
+            dataModel.data.value = item
+            MyDialogFragment().show(parentFragmentManager, "Show")
         }
     })
 
@@ -39,7 +49,8 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         fun newInstance() = MainFragment()
     }
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
@@ -67,11 +78,10 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     private fun initSearchView() = with(binding){
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
+                return false
             }
             override fun onQueryTextChange(newText: String?): Boolean {
-                val list = myDBManager!!.readDBData(newText!!)
-                adapter.updateAdapter(list)
+                fillAdapter(newText!!)
                 return true
             }
         })
@@ -80,20 +90,24 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         rvNotes.layoutManager = LinearLayoutManager(requireContext())
         rvNotes.adapter = adapter
     }
-    private fun fillAdapter(){
-        val list = myDBManager!!.readDBData("")
-        adapter.updateAdapter(list)
-        if (list.size > 0){
-            binding.tvNoElement.visibility = View.GONE
-        }else{
-            binding.tvNoElement.visibility = View.VISIBLE
+    private fun fillAdapter(text: String){
+        job?.cancel()
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val list = myDBManager!!.readDBData(text)
+            adapter.updateAdapter(list)
+            if (list.size > 0){
+                binding.tvNoElement.visibility = View.GONE
+            }else{
+                binding.tvNoElement.visibility = View.VISIBLE
+            }
         }
+
     }
 
     override fun onResume() {
         super.onResume()
         myDBManager?.openDB()
-        fillAdapter()
+        fillAdapter("")
         initSearchView()
     }
     override fun onDestroy() {
@@ -103,6 +117,8 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
     }
 
     override fun onClick(item: Model) {
-        findNavController().navigate(R.id.action_mainFragment_to_addFragment)
+    }
+
+    override fun onLongClick(item: Model) {
     }
 }
