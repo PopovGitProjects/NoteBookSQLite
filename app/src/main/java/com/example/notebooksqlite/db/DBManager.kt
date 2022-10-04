@@ -60,9 +60,8 @@ class DBManager(context: Context) {
         cursor?.close()
         return@withContext dataList
     }
-    fun removeItemFromDB(id: String){
+    fun removeItemFromDB(id: Int){
         val selection = BaseColumns._ID + "=$id"
-        Log.d("My", "DBmanager id = $selection")
         db?.delete(DBConstants.TABLE_NAME, selection, null)
     }
     suspend fun updateItemToDB(id: Int, title: String, content: String, uri: String, time: String)
