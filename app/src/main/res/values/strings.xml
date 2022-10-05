@@ -2,7 +2,9 @@
     <string name="app_name">NoteBookSQLite</string>
     <string name="floating_action_button">Floating Action Button</string>
     <string name="title">Title</string>
-    <string name="add_note">Add note</string>
     <string name="note">Note</string>
     <string name="image_view">Image view</string>
+    <string name="delete_note">Do you want to delete an entry?</string>
+    <string name="delete">Delete</string>
+    <string name="no">No</string>
 </resources>

@@ -44,6 +44,7 @@
             android:id="@+id/edtTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/edit_text_color_state"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,6 +64,7 @@
             android:id="@+id/edtNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/edit_text_color_state"
             android:gravity="top" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -94,6 +96,19 @@
         tools:ignore="SpeakableTextPresentCheck"
         android:focusable="true"
         android:contentDescription="TODO" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:src="@drawable/ic_edit_line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/imageLayout"

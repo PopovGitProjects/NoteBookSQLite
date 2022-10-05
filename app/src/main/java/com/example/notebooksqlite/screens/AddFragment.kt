@@ -1,6 +1,8 @@
 package com.example.notebooksqlite.screens
 
+import android.icu.util.Calendar
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -20,8 +23,18 @@ import com.example.notebooksqlite.constants.Const
 import com.example.notebooksqlite.databinding.FragmentAddBinding
 import com.example.notebooksqlite.db.DBManager
 import com.example.notebooksqlite.models.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddFragment : Fragment() {
+
+    private var isEditState = false
+
+    private var itemID = 0
+
     private var _binding: FragmentAddBinding? = null
 
     private val binding get() = _binding!!
@@ -63,6 +76,7 @@ class AddFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolBar()
@@ -79,12 +93,19 @@ class AddFragment : Fragment() {
                 imgBtnDelete.visibility = View.GONE
                 imgAdded.load(it.uri)
             }
+            if (it.edit){
+                isEditState = true
+                itemID = it.id.toInt()
+                fabEdit.visibility = View.VISIBLE
+            }
             fabAddImage.visibility = View.GONE
-            fabCheck.visibility = View.GONE
             edtTitle.setText(it.title)
+            edtTitle.isEnabled = false
             edtNote.setText(it.content)
+            edtNote.isEnabled = false
         }
     }
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun buttonAction() = with(binding){
         fabAddImage.setOnClickListener {
             imageLayout.visibility = View.VISIBLE
@@ -97,13 +118,28 @@ class AddFragment : Fragment() {
         imgBtnEdit.setOnClickListener {
             launcher.launch(arrayOf(Const.MIME_TYPE_IMAGE))
         }
+        fabEdit.setOnClickListener {
+            edtTitle.isEnabled = true
+            edtNote.isEnabled = true
+            imageLayout.visibility = View.VISIBLE
+            imgBtnEdit.visibility = View.VISIBLE
+            imgBtnDelete.visibility = View.VISIBLE
+            fabEdit.visibility = View.GONE
+        }
         fabCheck.setOnClickListener {
             val title = edtTitle.text.toString()
             val note = edtNote.text.toString()
             if (title != "" && note != ""){
-                myDBManager?.insertToDB(title, note, tempImageUri)
-                findNavController().navigate(R.id.action_addFragment_to_mainFragment)
-                Toast.makeText(requireContext(), "Entry added to Data Base", Toast.LENGTH_SHORT).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (isEditState){
+                        myDBManager?.updateItemToDB(itemID, title, note, tempImageUri, getCurrentTime())
+                        Toast.makeText(requireContext(), "Entry updated to Data Base", Toast.LENGTH_SHORT).show()
+                    }else{
+                        myDBManager?.insertToDB(title, note, tempImageUri, getCurrentTime())
+                        Toast.makeText(requireContext(), "Entry added to Data Base", Toast.LENGTH_SHORT).show()
+                    }
+                    findNavController().navigate(R.id.action_addFragment_to_mainFragment)
+                }
             }
         }
     }
@@ -116,10 +152,17 @@ class AddFragment : Fragment() {
         _binding = null
         myDBManager?.closeDb()
         dataModel.data.value = null
+        isEditState = false
     }
     private fun toolBar() = with(binding){
         val appBarConfiguration = AppBarConfiguration(findNavController().graph)
         materialToolbar.setupWithNavController(findNavController(), appBarConfiguration)
         materialToolbar.title = "Add Note"
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun getCurrentTime(): String{
+        val time = Calendar.getInstance().time
+        val formatter = SimpleDateFormat("dd.MM.yy kk:mm", Locale.getDefault())
+        return formatter.format(time)
     }
 }

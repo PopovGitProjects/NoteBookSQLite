@@ -7,6 +7,7 @@ object DBConstants: BaseColumns {
     const val COLUMN_NAME_TITLE = "title"
     const val COLUMN_NAME_CONTENT = "content"
     const val COLUMN_IMAGE_URI = "image_uri"
+    const val COLUMN_TIME = "time"
 
     const val DATABASE_VERSION = 1
     const val DATABASE_NAME = "MyDB.db"
@@ -15,7 +16,8 @@ object DBConstants: BaseColumns {
             "${BaseColumns._ID} INTEGER PRIMARY KEY, " +
             "$COLUMN_NAME_TITLE TEXT, " +
             "$COLUMN_NAME_CONTENT TEXT," +
-            "$COLUMN_IMAGE_URI TEXT)"
+            "$COLUMN_IMAGE_URI TEXT," +
+            "$COLUMN_TIME)"
     const val SQL_DELETE_TABLE = "DROP TABLE IF EXIST $TABLE_NAME"
 
 }

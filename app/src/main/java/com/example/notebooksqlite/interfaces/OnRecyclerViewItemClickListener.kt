@@ -4,4 +4,5 @@ import com.example.notebooksqlite.models.Model
 
 interface OnRecyclerViewItemClickListener {
     fun onClick(item: Model)
+    fun onLongClick(item: Model)
 }
