@@ -76,12 +76,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:contentDescription="@string/check_button"
+        android:focusable="true"
         android:src="@drawable/ic_icon_check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:focusable="true"
-        android:contentDescription="TODO" />
+        tools:ignore="SpeakableTextPresentCheck,RedundantDescriptionCheck" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddImage"
@@ -90,12 +90,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:contentDescription="@string/add_image_button"
+        android:focusable="true"
         android:src="@drawable/ic_icon_download"
         app:layout_constraintBottom_toTopOf="@+id/fabCheck"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:focusable="true"
-        android:contentDescription="TODO" />
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,RedundantDescriptionCheck" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEdit"
@@ -108,7 +108,8 @@
         android:src="@drawable/ic_edit_line"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:contentDescription="@string/floating_action_button" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/imageLayout"
@@ -131,7 +132,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            android:contentDescription="@string/image_view" />
 
         <ImageButton
             android:id="@+id/imgBtnEdit"
@@ -142,10 +144,11 @@
             android:background="@null"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:src="@android:drawable/ic_menu_edit"
+            android:src="@drawable/ic_icon_image_edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:contentDescription="@string/add_image_button" />
 
         <ImageButton
             android:id="@+id/imgBtnDelete"
@@ -156,10 +159,11 @@
             android:background="@null"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:src="@android:drawable/ic_menu_delete"
+            android:src="@drawable/ic_icon_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:contentDescription="@string/add_image_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

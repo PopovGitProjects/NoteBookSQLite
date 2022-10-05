@@ -7,4 +7,6 @@
     <string name="delete_note">Do you want to delete an entry?</string>
     <string name="delete">Delete</string>
     <string name="no">No</string>
+    <string name="check_button">check button</string>
+    <string name="add_image_button">add image button</string>
 </resources>
