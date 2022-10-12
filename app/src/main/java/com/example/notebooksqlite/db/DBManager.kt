@@ -17,7 +17,6 @@ class DBManager(context: Context) {
     fun openDB(){
         db = dbHelper.writableDatabase
     }
-
     suspend fun insertToDB(title: String, content: String, uri: String, time: String)
     = withContext(Dispatchers.IO){
         val values = ContentValues().apply {
@@ -28,7 +27,6 @@ class DBManager(context: Context) {
         }
         db?.insert(DBConstants.TABLE_NAME, null, values)
     }
-
     @SuppressLint("Range")
     suspend fun readDBData(searchText: String): ArrayList<Model> = withContext(Dispatchers.IO){
         val dataList = ArrayList<Model>()

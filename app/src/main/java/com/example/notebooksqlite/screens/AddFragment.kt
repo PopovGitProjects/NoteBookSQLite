@@ -32,19 +32,12 @@ import java.util.*
 class AddFragment : Fragment() {
 
     private var isEditState = false
-
     private var itemID = 0
-
     private var _binding: FragmentAddBinding? = null
-
     private val binding get() = _binding!!
-
     private var tempImageUri = "empty"
-
     private var myDBManager: DBManager? = null
-
     private val dataModel: MainViewModel by activityViewModels()
-
     private val launcher: ActivityResultLauncher<Array<String>> = registerForActivityResult(
         ActivityResultContracts.OpenDocument()){
             imageUri: Uri? ->
@@ -64,7 +57,6 @@ class AddFragment : Fragment() {
         fun newInstance() = AddFragment()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,7 +67,6 @@ class AddFragment : Fragment() {
         }
         return binding.root
     }
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -103,6 +94,7 @@ class AddFragment : Fragment() {
             edtTitle.isEnabled = false
             edtNote.setText(it.content)
             edtNote.isEnabled = false
+            fabCheck.visibility = View.GONE
         }
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -125,6 +117,7 @@ class AddFragment : Fragment() {
             imgBtnEdit.visibility = View.VISIBLE
             imgBtnDelete.visibility = View.VISIBLE
             fabEdit.visibility = View.GONE
+            fabCheck.visibility = View.VISIBLE
         }
         fabCheck.setOnClickListener {
             val title = edtTitle.text.toString()
@@ -143,17 +136,6 @@ class AddFragment : Fragment() {
             }
         }
     }
-    override fun onResume() {
-        super.onResume()
-        myDBManager?.openDB()
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-        myDBManager?.closeDb()
-        dataModel.data.value = null
-        isEditState = false
-    }
     private fun toolBar() = with(binding){
         val appBarConfiguration = AppBarConfiguration(findNavController().graph)
         materialToolbar.setupWithNavController(findNavController(), appBarConfiguration)
@@ -164,5 +146,16 @@ class AddFragment : Fragment() {
         val time = Calendar.getInstance().time
         val formatter = SimpleDateFormat("dd.MM.yy kk:mm", Locale.getDefault())
         return formatter.format(time)
+    }
+    override fun onResume() {
+        super.onResume()
+        myDBManager?.openDB()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        myDBManager?.closeDb()
+        dataModel.data.value = null
+        isEditState = false
     }
 }

@@ -11,7 +11,6 @@ class DBHelper(context: Context): SQLiteOpenHelper(context,
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(DBConstants.CREATE_TABLE)
     }
-
     override fun onUpgrade(db: SQLiteDatabase?, oldVersionDB: Int, newVersionDB: Int) {
         db?.execSQL(DBConstants.SQL_DELETE_TABLE)
         onCreate(db)

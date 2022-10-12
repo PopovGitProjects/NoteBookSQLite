@@ -17,9 +17,9 @@ class Adapter(
     mainItemList: ArrayList<Model>,
     listener: OnRecyclerViewItemClickListener
 ): RecyclerView.Adapter<Adapter.ViewHolder>() {
+
     private var itemList = mainItemList
     private val adapterListener = listener
-
 
     class ViewHolder(itemView: View, listener: OnRecyclerViewItemClickListener):
         RecyclerView.ViewHolder(itemView){
@@ -50,7 +50,6 @@ class Adapter(
             }
         }
     }
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.note_item, viewGroup, false)

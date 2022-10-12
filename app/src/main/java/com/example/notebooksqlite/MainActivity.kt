@@ -1,6 +1,6 @@
 package com.example.notebooksqlite
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity

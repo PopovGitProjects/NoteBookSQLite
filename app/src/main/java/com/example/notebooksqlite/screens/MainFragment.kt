@@ -24,14 +24,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
+
     private var _binding: FragmentMainBinding? = null
-
     private val binding get() = _binding!!
-
     private val dataModel: MainViewModel by activityViewModels()
-
     private var job: Job? = null
-
+    private var myDBManager: DBManager? = null
     private val adapter = Adapter(ArrayList(), object : OnRecyclerViewItemClickListener {
         override fun onClick(item: Model) {
             findNavController().navigate(R.id.action_mainFragment_to_addFragment)
@@ -42,8 +40,6 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
             MyDialogFragment().show(parentFragmentManager, "Show")
         }
     })
-
-    private var myDBManager: DBManager? = null
 
     companion object {
         fun newInstance() = MainFragment()
@@ -103,7 +99,10 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         }
 
     }
-
+    override fun onClick(item: Model) {
+    }
+    override fun onLongClick(item: Model) {
+    }
     override fun onResume() {
         super.onResume()
         myDBManager?.openDB()
@@ -114,11 +113,5 @@ class MainFragment : Fragment(), OnRecyclerViewItemClickListener {
         super.onDestroy()
         myDBManager?.closeDb()
         _binding = null
-    }
-
-    override fun onClick(item: Model) {
-    }
-
-    override fun onLongClick(item: Model) {
     }
 }
